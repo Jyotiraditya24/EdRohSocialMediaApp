@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
-export default async function register  (req, resp) {
+export async function register(req, resp) {
   try {
     const {
       firstName,
@@ -34,4 +35,23 @@ export default async function register  (req, resp) {
   } catch (error) {
     resp.status(500).json({ error: error });
   }
-};
+}
+
+/* LOGGING IN */
+export async function login(req, resp) {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      resp.status(400).json({ message: "User does not exist" });
+    }
+    /* Matching the password in database and from frontend  */
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      resp.status(400).json({ message: "Invalid Credentials." });
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  } catch (error) {
+    resp.status(500).json({ error: error });
+  }
+}

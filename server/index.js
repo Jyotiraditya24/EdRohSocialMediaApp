@@ -8,7 +8,8 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
-import register from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
 
 /* MIDDLEWARE / CONFIGIRATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -38,9 +39,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* ROUTES */
+/* ROUTES  WITH FILES*/
 app.post("/auth/register", upload.single("picture"), register);
 
+/* ROUTES  */
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
