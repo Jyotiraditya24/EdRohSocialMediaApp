@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import morgan from "morgan";
 import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js"
 
 /* MIDDLEWARE / CONFIGIRATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -44,6 +45,7 @@ app.post("/auth/register", upload.single("picture"), register);
 
 /* ROUTES  */
 app.use("/auth", authRoutes);
+app.use("/users",userRoutes)
 
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
