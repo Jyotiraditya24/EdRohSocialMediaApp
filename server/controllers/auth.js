@@ -51,6 +51,10 @@ export async function login(req, resp) {
       resp.status(400).json({ message: "Invalid Credentials." });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    //deleting so not to send password to the frontend
+    const userWithoutPassword = { ...user.toObject(), password: undefined };
+    //sending back token and the email
+    resp.status(200).json({ token, user: userWithoutPassword });
   } catch (error) {
     resp.status(500).json({ error: error });
   }
