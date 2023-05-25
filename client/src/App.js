@@ -1,9 +1,19 @@
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/homepage";
+import LoginPage from "./pages/loginPage";
+import ProfilePage from "./pages/profilepage";
 
 function App() {
   return (
-    <div className="App">
-      <h1 className='bg-red-400'>Hello</h1>
+    <div className="app">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
