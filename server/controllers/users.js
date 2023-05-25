@@ -46,4 +46,41 @@ export const getUserFriends = async (req, resp) => {
   }
 };
 
-export const addRemoveFriend = async (req, resp) => {};
+/*UPDATE */
+
+export const addRemoveFriend = async (req, resp) => {
+  try {
+    let { id, friendId } = req.params;
+    const user = await User.findById(id);
+    const friend = await User.findById(id);
+
+    if (user.friends.includes(friendId)) {
+      // removing id of user from friend
+      user.friends = user.friends.filter((id) => id !== friendId);
+      // removing id of friend from user
+      friend.friends = user.friends.filter((id) => id !== id);
+    } else {
+      user.friends.push(friendId);
+      friend.friends.push(id);
+    }
+
+    /* Saving the Updated List */
+    await user.save();
+    await friend.save();
+
+    /* Formating the FriendList sending back all the friends of the user now */
+    /* Making api call to each friend in the friendList of User */
+    const friends = await Promise.all(
+      user.friends.map((id) => User.findById(id))
+    );
+
+    const formattedFriends = friends.map(
+      ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+        return { _id, firstName, lastName, occupation, location, picturePath };
+      }
+    );
+    resp.status(200).json(formattedFriends);
+  } catch (error) {
+    resp.status(404).json({ message: error.message });
+  }
+};
