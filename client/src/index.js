@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import authReducer from "./state//index";
 import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react";
+import { Provider } from "react-redux";
 import {
   persistStore,
   persistReducer,
@@ -21,8 +21,9 @@ import { PersistGate } from "redux-persist/integration/react";
 
 const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
+
 const store = configureStore({
-  reducer: persistReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddelware) => {
     getDefaultMiddelware({
       serializableCheck: {
@@ -32,9 +33,15 @@ const store = configureStore({
   },
 });
 
+// const persisted = persistStore(store);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistStore(store)}>
+        <App />
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
