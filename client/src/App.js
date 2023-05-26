@@ -3,8 +3,10 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/homepage";
 import LoginPage from "./pages/loginPage";
 import ProfilePage from "./pages/profilepage";
+import {useSelector} from "react-redux";
 
 function App() {
+  const mode = useSelector((state)=>{return state.mode});
   return (
     <div className="app">
       <BrowserRouter>
