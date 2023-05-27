@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setMode, setLogin, setLogout } from "../../state/index";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { BiSearch } from "react-icons/bi";
 import { MdDarkMode, MdLightMode, MdOutlineMessage } from "react-icons/md";
 import { RiNotification2Fill } from "react-icons/ri";
 import { AiFillQuestionCircle } from "react-icons/ai";
+import DropDown from "../../components/Dropdown";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -16,7 +17,6 @@ const Navbar = () => {
   const mode = useSelector((state) => state.mode);
 
   const fullName = user ? user?.firstName + user?.lastName : "dummyName";
-  console.log(fullName);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
@@ -60,11 +60,7 @@ const Navbar = () => {
             <MdOutlineMessage size={20}></MdOutlineMessage>
             <RiNotification2Fill size={20}></RiNotification2Fill>
             <AiFillQuestionCircle size={20}></AiFillQuestionCircle>
-            <div className="bg-white rounded-sm px-3 py-2">
-              <select name="person" id="" className="bg-transparent fon">
-                <option value={fullName}>{fullName}</option>
-              </select>
-            </div>
+            <DropDown/>
           </div>
         ) : (
           <div>Hello</div>
