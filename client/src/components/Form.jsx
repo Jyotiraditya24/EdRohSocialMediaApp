@@ -69,6 +69,7 @@ const Form = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
+  /*LEARNING HOW TO SEND DATA WHEN HAVING IMAGE */
   const register = async(values,onSubmitProps)=>{
     // we cannot pass directly the value even its a object because we have an image,so we will use the below
     //allows us to send form with image and Formdata() is an javascript API
