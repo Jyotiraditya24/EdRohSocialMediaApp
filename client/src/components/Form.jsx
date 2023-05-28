@@ -8,7 +8,6 @@ import { useState } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { AiOutlineEdit } from "react-icons/ai";
 import Button from "./Button";
-import { register } from "../../../server/controllers/auth";
 
 const registerSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -70,21 +69,58 @@ const Form = () => {
   const isRegister = pageType === "register";
 
   /*LEARNING HOW TO SEND DATA WHEN HAVING IMAGE */
-  const register = async(values,onSubmitProps)=>{
+  const register = async (values, onSubmitProps) => {
     // we cannot pass directly the value even its a object because we have an image,so we will use the below
     //allows us to send form with image and Formdata() is an javascript API
-    const fromData = new FormData();
-    for(let value in values){
-        FormData.append(value,values[value]);
+    const formData = new FormData();
+    for (let value in values) {
+      formData.append(value, values[value]);
     }
-
-  }
-
-  const handleFormSubmit = async (values, onSubmitProps) => {
-    if(isLogin) await login(values,onSubmitProps);
-    if(isRegister) await register(values,onSubmitProps);
+    formData.append("picturePath", values.picture.name);
+    const savedUserResponse = await fetch(
+      "http://localhost:3001/auth/register",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const savedUser = await savedUserResponse.json();
+    // receving what backend has sent us
+    onSubmitProps.resetForm();
+    if (savedUser) {
+      setPageType("login");
+    }
   };
 
+  const login = async (values, onSubmitProps) => {
+    const loggedInUserResponse = await fetch(
+      "http://localhost:3001/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values), //we send and recieve in string format
+      }
+    );
+    //we logged in we will get the token from backend
+    const loggedUser = await loggedInUserResponse.json(); // converting to json from string format
+    onSubmitProps.resetForm();
+    if (loggedUser) {
+      // set the token and user in the Redux store
+      dispatch(
+        setLogin({
+          user: loggedUser.user,
+          token: loggedUser.token,
+        })
+      ); //sending an object we need action.payload.user and action.payload.token
+    }
+    navigate("/home");
+  };
+
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    console.log(values);
+    if (isLogin) await login(values, onSubmitProps);
+    if (isRegister) await register(values, onSubmitProps);
+  };
 
   return (
     <Formik
@@ -99,11 +135,11 @@ const Form = () => {
         changed,
         handleBlur,
         handleChange,
-        hanldeSubmit,
+        handleSubmit,
         setFieldValue,
         resetForm,
       }) => (
-        <form onSubmit={hanldeSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="bg-blue-600 p-10 w-[70%] mx-auto">
             {isRegister && (
               <div>
@@ -121,10 +157,6 @@ const Form = () => {
                     onChange={handleChange}
                     value={values.firstName}
                     name="firstName" //should match the initalvalue name
-                    error={
-                      Boolean(touched.firstName) && Boolean(errors.firstName)
-                    } /* checking if that been touched then it shows the error */
-                    helperText={touched.firstName && errors.firstName}
                     placeholder="FirstName"
                     className="lastname px-6 py-3 rounded-md"
                   />
@@ -135,10 +167,6 @@ const Form = () => {
                     onChange={handleChange}
                     value={values.lastName}
                     name="lastName" //should match the initialvalue name
-                    error={
-                      Boolean(touched.lastName) && Boolean(errors.lastName)
-                    } /* checking if that been touched then it shows the error */
-                    helperText={touched.lastName && errors.lastName}
                     className="px-6 py-3 rounded-md"
                     placeholder="LastName"
                   />
@@ -149,10 +177,7 @@ const Form = () => {
                     onChange={handleChange}
                     value={values.location}
                     name="location" //should match the initialvalue name
-                    error={
-                      Boolean(touched.location) && Boolean(errors.location)
-                    } /* checking if that been touched then it shows the error */
-                    helperText={touched.location && errors.location}
+                    /* checking if that been touched then it shows the error */
                     className={`px-6 py-3 rounded-md ${
                       isNonMobileScreen ? "col-span-2" : ""
                     }`}
@@ -165,10 +190,6 @@ const Form = () => {
                     onChange={handleChange}
                     value={values.occupation}
                     name="occupation" //should match the initialvalue name
-                    error={
-                      Boolean(touched.occupation) && Boolean(errors.occupation)
-                    } /* checking if that been touched then it shows the error */
-                    helperText={touched.occupation && errors.occupation}
                     className={`px-6 py-3 rounded-md ${
                       isNonMobileScreen ? "col-span-2" : ""
                     }`}
@@ -215,10 +236,6 @@ const Form = () => {
                 onChange={handleChange}
                 value={values.email}
                 name="email" //should match the initialvalue name
-                error={
-                  Boolean(touched.email) && Boolean(errors.email)
-                } /* checking if that been touched then it shows the error */
-                helperText={touched.email && errors.email}
                 className={`px-6 py-3 rounded-md ${
                   isNonMobileScreen ? "col-span-2" : ""
                 } mt-2`}
@@ -231,10 +248,6 @@ const Form = () => {
                 onChange={handleChange}
                 value={values.password}
                 name="password" //should match the initialvalue name
-                error={
-                  Boolean(touched.password) && Boolean(errors.password)
-                } /* checking if that been touched then it shows the error */
-                helperText={touched.password && errors.password}
                 className={`px-6 py-3 rounded-md ${
                   isNonMobileScreen ? "col-span-2" : ""
                 } mt-2`}
@@ -242,7 +255,10 @@ const Form = () => {
               />
             </div>
             <div className="mt-10 grid">
-              <Button type="submit" label={`${isLogin ? "LOGIN" : "REGISTER"}`}></Button>
+              <Button
+                type="submit"
+                label={`${isLogin ? "LOGIN" : "REGISTER"}`}
+              ></Button>
             </div>
 
             <p
@@ -254,7 +270,9 @@ const Form = () => {
               }}
               className="underline hover:cursor-pointer mt-4 text-white"
             >
-              {isLogin?"Don't have an account?Sign up":"Already have an Account? Login here "}
+              {isLogin
+                ? "Don't have an account?Sign up"
+                : "Already have an Account? Login here "}
             </p>
           </div>
         </form>
