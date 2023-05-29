@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import User from "../models/User.js";
 
 /* READ  */
@@ -6,6 +7,7 @@ export const getUser = async (req, resp) => {
   try {
     /* /user/:id so params hai la liye  */
     const { id } = req.params;
+    console.log(mongoose.isValidObjectId(id));
     /* finding that user */
     const user = await User.findById({ id });
     ///////check later because password is also going
