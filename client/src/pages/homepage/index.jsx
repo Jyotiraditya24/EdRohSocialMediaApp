@@ -10,10 +10,21 @@ const HomePage = () => {
   return (
     <div>
       <Navbar />
-      <section className={`p-8 ${isNonMobileScreen?"flex":"block"} gap-2  justify-between`}>
-        <div className={`${isNonMobileScreen?"basis-[26%]":undefined}`}>
-        <UserWidget userId={_id} picturePath={picturePath}/>
+      <section
+        className={`p-8 ${
+          isNonMobileScreen ? "flex" : "block"
+        } gap-2  justify-between`}
+      >
+        <div className={`${isNonMobileScreen ? "basis-[26%]" : undefined}`}>
+          <UserWidget userId={_id} picturePath={picturePath} />
         </div>
+        <div
+          className={`${isNonMobileScreen ? "w-[42%]" : undefined} ${
+            isNonMobileScreen ? undefined : "2rem"
+          }`}
+        ></div>
+        {/* FriendList will only show when on desktop screen */}
+        {isNonMobileScreen && <div className="basis-[26%] "></div>}
       </section>
     </div>
   );
