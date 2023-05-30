@@ -50,7 +50,9 @@ export const UserWidget = ({ userId, picturePath }) => {
           className="flex flex-row gap-4"
           onClick={() => navigate(`/profile/${userId}`)}
         >
-          <UserImage image={picturePath} />
+          <div className="hover:cursor-pointer">
+            <UserImage image={picturePath} />
+          </div>
           <div className="flex flex-col">
             <p className="font-bold">
               {firstName} {lastName}
@@ -58,7 +60,10 @@ export const UserWidget = ({ userId, picturePath }) => {
             <p className="opacity-50">{friends?.length} friends</p>
           </div>
         </div>
-        <BsPersonFillAdd size={20}></BsPersonFillAdd>
+        <BsPersonFillAdd
+          size={20}
+          className="hover:cursor-pointer"
+        ></BsPersonFillAdd>
       </div>
       <p className="border-gray-500 opacity-80 bg-gradient-to-r from-yellow-200 to-cyan-500 p-[1px]"></p>
       <div className="flex flex-col gap-3">

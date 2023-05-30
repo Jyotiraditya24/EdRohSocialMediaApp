@@ -10,8 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { AiOutlineEdit } from "react-icons/ai";
-import { AiFillDelete } from "react-icons/ai";
-import { useEffect } from "react";
+
 
 export const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
