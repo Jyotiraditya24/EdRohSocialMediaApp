@@ -1,12 +1,13 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 // CREATE Post
 export const createPost = async (req, resp) => {
   try {
     const { userId, description, picturePath } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(mongoose.Types.ObjectId(userId));
     const newPost = new Post({
       userId,
       firstName: user.firstName,

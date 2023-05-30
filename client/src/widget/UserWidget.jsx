@@ -52,13 +52,15 @@ export const UserWidget = ({ userId, picturePath }) => {
         >
           <UserImage image={picturePath} />
           <div className="flex flex-col">
-            <p className="font-bold">{firstName} {lastName}</p>
+            <p className="font-bold">
+              {firstName} {lastName}
+            </p>
             <p className="opacity-50">{friends?.length} friends</p>
           </div>
         </div>
         <BsPersonFillAdd size={20}></BsPersonFillAdd>
       </div>
-      <p className="border-t-2  border-gray-500 opacity-50"></p>
+      <p className="border-gray-500 opacity-80 bg-gradient-to-r from-yellow-200 to-cyan-500 p-[1px]"></p>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-10">
           <GrLocation size={25}></GrLocation>
@@ -69,7 +71,7 @@ export const UserWidget = ({ userId, picturePath }) => {
           <p>{occupation}</p>
         </div>
       </div>
-      <p className="border-t-2 mt-4 border-gray-500 opacity-50"></p>
+      <p className="border-gray-500 opacity-80 bg-gradient-to-r from-yellow-200 to-cyan-500 p-[1px]"></p>
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between items-center">
@@ -81,7 +83,7 @@ export const UserWidget = ({ userId, picturePath }) => {
           <p>{impressions}</p>
         </div>
       </div>
-      <p className="border-t-2 mt-2 border-gray-500 opacity-50"></p>
+      <p className="border-gray-500 opacity-80 bg-gradient-to-r from-yellow-200 to-cyan-500 p-[1px]"></p>
       <div className="flex flex-col">
         <h1 className="font-bold mb-3">Social Profiles</h1>
         <div className="flex flex-row justify-between items-center">
