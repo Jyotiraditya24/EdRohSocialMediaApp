@@ -9,24 +9,25 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
 
   const getPosts = async () => {
-    const response = await fetch("http://locahost:3001/posts", {
+    const response = await fetch("http://localhost:3001/posts", {
       method: "GET",
       headers: {
-        Authentication: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = await response.json();
-    dispatch(() => setPosts({ posts: data }));
+    dispatch(setPosts({ posts: data }));
   };
+
   const getUserPosts = async () => {
-    const response = await fetch(`http://locahost:3001/${userId}/posts`, {
+    const response = await fetch(`http://localhost:3001/posts/${userId}/posts`, {
       method: "GET",
       headers: {
-        Authentication: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = await response.json();
-    dispatch(() => setPosts({ posts: data }));
+    dispatch(setPosts({ posts: data }));
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           likes,
           comments,
         }) => (
-          <section
+          <PostWidget
             className="rounded-lg bg-blue-600 p-4 flex flex-col gap-4"
             key={_id}
             name={`${firstName} ${lastName}`}
@@ -64,7 +65,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
-          ></section>
+          ></PostWidget>
         )
       )}
     </>
