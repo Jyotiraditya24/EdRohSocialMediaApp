@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 export const createPost = async (req, resp) => {
   try {
     const { userId, description, picturePath } = req.body;
-
     const user = await User.findById(mongoose.Types.ObjectId(userId));
     const newPost = new Post({
       userId,
@@ -16,17 +15,18 @@ export const createPost = async (req, resp) => {
       description,
       userPicturePath: user.picturePath,
       picturePath,
-      likes: {}, //will look like-> likes: { "someID": true/false}
+      likes: new Map(),
       comments: [],
     });
     await newPost.save();
-    /* returns all the post  */
-    const post = await Post.find();
-    resp.status(201).json(post);
+    const posts = await Post.find();
+    resp.status(201).json(posts);
   } catch (error) {
     resp.status(409).json({ message: error.message });
   }
 };
+
+
 
 /* READ */
 
@@ -36,7 +36,7 @@ export const getFeedPosts = async (req, resp) => {
     const posts = await Post.find();
     resp.status(200).json(posts);
   } catch (error) {
-    resp.status(409).json({ message: error.message });
+    resp.status(404).json({ message: error.message });
   }
 };
 
@@ -46,7 +46,9 @@ export const getUserPosts = async (req, resp) => {
     const { userId } = req.params;
     const posts = await Post.find({ userId });
     resp.status(200).json(posts);
-  } catch (error) {}
+  } catch (error) {
+    resp.status(404).json({ message: error.message });
+  }
 };
 
 /* UPDATE */
@@ -54,18 +56,25 @@ export const getUserPosts = async (req, resp) => {
 export const likePost = async (req, resp) => {
   const { id } = req.params;
   const { userId } = req.body;
-  const post = await Post.findById(id);
-  const isLiked = post.like.get(userId);
+  const post = await Post.findById(mongoose.Types.ObjectId(id));
+
+  if (!post.likes) {
+    post.likes = new Map();
+  }
+
+  const isLiked = post.likes.get(userId);
   if (isLiked) {
-    post.like.delete(userId);
+    post.likes.delete(userId);
   } else {
-    post.like.set(userId, true);
+    post.likes.set(userId, true);
   }
 
   const updatedPost = await Post.findByIdAndUpdate(
-    id,
-    { like: post.like },
-    { new: true } //a object is created
+    mongoose.Types.ObjectId(id),
+    { likes: post.likes },
+    { new: true }
   );
   resp.status(200).json(updatedPost);
 };
+
+

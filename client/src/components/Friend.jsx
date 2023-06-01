@@ -1,19 +1,16 @@
-import React from "react";
-import UserImage from "./UserImage";
-import { BsPersonFillAdd, BsPersonDash } from "react-icons/bs";
+import { MdPersonAdd, MdPersonRemove } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFriends } from "../state/index";
+import { setFriends } from "../state";
 
-
-const Friend = ({ friendId, userPicturePath, name, subtitle }) => {
+const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends) || []; // Add a default empty array if friends is null or undefined
+  const friends = useSelector((state) => state.user.friends);
 
-  const isFriend = false;
+  const isFriend = friends.find((friend) => friend._id === friendId);
 
   const patchFriend = async () => {
     const response = await fetch(
@@ -31,32 +28,35 @@ const Friend = ({ friendId, userPicturePath, name, subtitle }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center">
-      <div>
-        <UserImage image={userPicturePath} className="hover:cursor-pointer" />
+    <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center gap-4">
+        <img
+          src={userPicturePath}
+          alt="User"
+          className="w-14 h-14 rounded-full"
+        />
         <div
-          className="flex flex-col"
           onClick={() => {
             navigate(`/profile/${friendId}`);
+            navigate(0);
           }}
         >
-          <p className="font-bold"> {name}</p>
-          <p className="opacity-50">{subtitle}</p>
+          <h5 className="text-white font-medium cursor-pointer hover:text-primary-light">
+            {name}
+          </h5>
+          <p className="text-gray-400 text-xs">{subtitle}</p>
         </div>
       </div>
-      {isFriend ? (
-        <BsPersonDash
-          size={20}
-          className="hover:cursor-pointer"
-          onClick={() => patchFriend()}
-        ></BsPersonDash>
-      ) : (
-        <BsPersonFillAdd
-          size={20}
-          className="hover:cursor-pointer"
-          onClick={() => patchFriend()}
-        ></BsPersonFillAdd>
-      )}
+      <button
+        onClick={() => patchFriend()}
+        className="bg-primary-light p-2 rounded-full"
+      >
+        {isFriend ? (
+          <MdPersonRemove className="text-primary-dark" />
+        ) : (
+          <MdPersonAdd className="text-primary-dark" />
+        )}
+      </button>
     </div>
   );
 };

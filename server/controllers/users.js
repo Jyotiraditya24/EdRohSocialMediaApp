@@ -22,12 +22,12 @@ export const getUserFriends = async (req, resp) => {
     /* /user/:id so params hai la liye  */
     const { id } = req.params;
     /* finding that user */
-    const user = await User.findById({ id });
+    const user = await User.findById(mongoose.Types.ObjectId(id));
 
     //   finding the friends
     // new concept doubt
     const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
+      user.friends.map((id) => User.findById(mongoose.Types.ObjectId(id)))
     );
     const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
@@ -52,14 +52,14 @@ export const getUserFriends = async (req, resp) => {
 export const addRemoveFriend = async (req, resp) => {
   try {
     let { id, friendId } = req.params;
-    const user = await User.findById(id);
-    const friend = await User.findById(id);
+    const user = await User.findById(mongoose.Types.ObjectId(id));
+    const friend = await User.findById(mongoose.Types.ObjectId(friendId));
 
     if (user.friends.includes(friendId)) {
       // removing id of user from friend
       user.friends = user.friends.filter((id) => id !== friendId);
       // removing id of friend from user
-      friend.friends = user.friends.filter((id) => id !== id);
+      friend.friends = friend.friends.filter((friendId) => friendId !== id);
     } else {
       user.friends.push(friendId);
       friend.friends.push(id);
@@ -72,7 +72,7 @@ export const addRemoveFriend = async (req, resp) => {
     /* Formating the FriendList sending back all the friends of the user now */
     /* Making api call to each friend in the friendList of User */
     const friends = await Promise.all(
-      user.friends.map((id) => User.findById(id))
+      user.friends.map((id) => User.findById(mongoose.Types.ObjectId(id)))
     );
 
     const formattedFriends = friends.map(
