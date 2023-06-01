@@ -2,6 +2,7 @@ import { MdPersonAdd, MdPersonRemove } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFriends } from "../state";
+import UserImage from "./UserImage";
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const dispatch = useDispatch();
@@ -30,11 +31,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   return (
     <div className="flex flex-row items-center">
       <div className="flex flex-row items-center gap-4">
-        <img
-          src={userPicturePath}
-          alt="User"
-          className="w-14 h-14 rounded-full"
-        />
+       <UserImage image={userPicturePath}/>
         <div
           onClick={() => {
             navigate(`/profile/${friendId}`);

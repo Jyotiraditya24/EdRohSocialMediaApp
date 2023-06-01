@@ -50,12 +50,12 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           location,
           picturePath,
           userPicturePath,
-          likes = [],
+          likes=[],
           comments,
         }) => (
           <div
             key={_id}
-            className="rounded-lg bg-blue-600 p-4 flex flex-col gap-4"
+            className="rounded-lg bg-blue-600 p-4 flex flex-col gap-4 mt-7"
           >
             <PostWidget
               postId={_id}
