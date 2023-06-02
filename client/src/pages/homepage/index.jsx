@@ -1,5 +1,7 @@
 import { useSelector } from "react-redux";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { AdverWidget } from "../../widget/AdverWidget";
+import FriendListWidget from "../../widget/FriendListWidget";
 import { MyPostWidget } from "../../widget/MyPostWidget";
 import PostsWidget from "../../widget/PostsWidget";
 import { UserWidget } from "../../widget/UserWidget";
@@ -29,7 +31,10 @@ const HomePage = () => {
           <PostsWidget userId={_id}/>
         </div>
         {/* FriendList will only show when on desktop screen */}
-        {isNonMobileScreen && <div className="basis-[26%] "></div>}
+        {isNonMobileScreen && <div className="basis-[26%] ">
+          <AdverWidget/>
+          <FriendListWidget userId={_id}/>
+          </div>}
       </section>
     </div>
   );

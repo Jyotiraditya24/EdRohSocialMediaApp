@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="flex justify-between  items-center gap-7">
           <div
             className="text-white font-bold hover:cursor-pointer transition"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/home")}
           >
             SOCIALMEDIA
           </div>

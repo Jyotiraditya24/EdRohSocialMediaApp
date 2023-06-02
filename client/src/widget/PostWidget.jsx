@@ -40,8 +40,6 @@ const PostWidget = ({
     dispatch(setPost({ post: updatedPost }));
   };
 
-  console.log("userPicturePath",userPicturePath);
-  console.log('picturePath',picturePath)
 
   return (
     <div className="rounded-lg bg-blue-600 p-4 flex flex-col gap-4 m-8">
