@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogin, setLogout } from "../state/index";
 
@@ -13,6 +13,12 @@ export default function DropDown() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const fullName = user ? user?.firstName + user?.lastName : "dummyName";
+  const navigate = useNavigate();
+
+  function handleChange() {
+    dispatch(()=>setLogout());
+    navigate("/");
+  }
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -53,10 +59,12 @@ export default function DropDown() {
               {({ active }) => (
                 <button
                   type="submit"
-                  onClick={() => dispatch(setLogout)}
+                  onClick={() => {
+                    handleChange();
+                  }}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block w-full px-4 py-2 text-left text-sm"
+                    "block w-full px-4 py-2 text-left text-sm hover:cursor-pointer"
                   )}
                 >
                   Sign out
