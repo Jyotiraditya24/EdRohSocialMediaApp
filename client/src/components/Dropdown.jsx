@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogin, setLogout } from "../state/index";
+import { setLogout } from "../state/index";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,7 +16,7 @@ export default function DropDown() {
   const navigate = useNavigate();
 
   function handleChange() {
-    dispatch(()=>setLogout());
+    dispatch(() => setLogout());
     navigate("/");
   }
   return (

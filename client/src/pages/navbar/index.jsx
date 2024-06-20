@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMode, setLogin, setLogout } from "../../state/index";
-import { Link, useNavigate } from "react-router-dom";
+import { setMode } from "../../state/index";
+import { useNavigate } from "react-router-dom";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { BiSearch } from "react-icons/bi";
 import { MdDarkMode, MdLightMode, MdOutlineMessage } from "react-icons/md";
@@ -15,7 +15,6 @@ const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
   const mode = useSelector((state) => state.mode);
 
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
